@@ -9,6 +9,9 @@ namespace Demo
     {
         static void Main(string[] args)
         {
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+
             var solutionDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
 
             var tesseractPath = solutionDirectory + @"\tesseract-master.1153";
@@ -22,7 +25,9 @@ namespace Demo
                 Console.WriteLine("File:" + fileName + "\n" + text + "\n");
             });
 
-            Console.WriteLine("Press enter to continue...");
+			stopwatch.Stop();
+			Console.WriteLine("Duration: " + stopwatch.Elapsed);
+			Console.WriteLine("Press enter to continue...");
             Console.ReadLine();
         }
 
