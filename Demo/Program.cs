@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Demo
@@ -12,7 +13,12 @@ namespace Demo
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 
-			var solutionDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+			var solutionDirectory = TryGetSolutionDirectoryInfo()?.FullName;
+			if (solutionDirectory == null)
+			{
+				Console.WriteLine("Could not find the solution folder.");
+				return;
+			}
 
 			var tesseractPath = solutionDirectory + @"\tesseract-master.1153";
 			var testFiles = Directory.EnumerateFiles(solutionDirectory + @"\samples");
@@ -75,6 +81,14 @@ namespace Demo
 			}
 
 			return output;
+		}
+
+		private static DirectoryInfo TryGetSolutionDirectoryInfo()
+		{
+			var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+			while (directory != null && !directory.GetFiles("*.sln").Any())
+				directory = directory.Parent;
+			return directory;
 		}
 	}
 }
